@@ -72,9 +72,10 @@ button, input { font: inherit; }
 .product-row > p { max-width: 400px; line-height: 1.5; color: rgba(38,28,22,.68); }
 .product-row > a { display: grid; place-items: center; width: 46px; height: 46px; border: 1px solid rgba(38,28,22,.28); border-radius: 50%; }
 
-.crop-story { background: #e6e6d2; transition: background .4s; }
+.crop-story { min-height: 500vh; background: #e6e6d2; transition: background .4s; }
 .crop-spargel { background: #e4e7c8; }
 .crop-himbeere { background: #ead9df; }
+.crop-sticky { position: sticky; top: 0; min-height: 100svh; display: flex; align-items: center; overflow: hidden; }
 .crop-shell { display: grid; grid-template-columns: .78fr 1.22fr; min-height: 760px; }
 .crop-copy { padding: 110px 80px 90px 0; }
 .crop-copy h2 { margin-top: 18px; font-size: clamp(48px, 4.4vw, 70px); }
@@ -82,6 +83,7 @@ button, input { font: inherit; }
 .crop-tabs button { padding: 10px 15px; background: transparent; border: 1px solid rgba(38,28,22,.26); border-radius: 30px; cursor: pointer; color: var(--soil); }
 .crop-tabs button[aria-selected="true"] { background: var(--soil); color: white; border-color: var(--soil); }
 .stage-copy { margin-top: 58px; max-width: 400px; }
+.stage-copy { animation: stage-enter .48s cubic-bezier(.2,.7,.2,1) both; }
 .stage-copy span { font-size: 12px; color: var(--berry); font-weight: 700; }
 .stage-copy h3 { margin: 8px 0; font-family: var(--serif); font-size: 42px; font-weight: 470; }
 .stage-copy p { line-height: 1.55; }
@@ -89,6 +91,15 @@ button, input { font: inherit; }
 .stage-controls button { width: 32px; height: 3px; padding: 0; border: 0; background: rgba(38,28,22,.24); cursor: pointer; }
 .stage-controls button.active { background: var(--berry); }
 .crop-visual { position: relative; min-height: 650px; align-self: stretch; overflow: hidden; background: linear-gradient(#d9e3dc 0 57%, #c4ae89 57% 60%, #594233 60%); }
+.story-photo { object-fit: cover; object-position: center; z-index: 0; filter: saturate(.76) brightness(.7); transform: scale(1.12); transition: filter .75s ease, transform 1s cubic-bezier(.2,.7,.2,1), object-position .9s ease; }
+.story-photo-wash { position: absolute; z-index: 1; inset: 0; background: linear-gradient(90deg, rgba(21,32,23,.42), transparent 45%), linear-gradient(0deg, rgba(19,25,18,.35), transparent 45%); transition: opacity .6s; }
+.crop-erdbeere .sun-glow, .crop-erdbeere .soil-line, .crop-erdbeere .plant { display: none; }
+.crop-erdbeere.story-step-0 .story-photo { filter: saturate(.42) brightness(.58); transform: scale(1.2); object-position: 40% 88%; }
+.crop-erdbeere.story-step-1 .story-photo { filter: saturate(.68) brightness(.66); transform: scale(1.15); object-position: 55% 68%; }
+.crop-erdbeere.story-step-2 .story-photo { filter: saturate(.9) brightness(.74); transform: scale(1.1); object-position: 58% 42%; }
+.crop-erdbeere.story-step-3 .story-photo { filter: saturate(1.05) brightness(.76); transform: scale(1.06); object-position: 62% 56%; }
+.crop-erdbeere.story-step-4 .story-photo { filter: saturate(1.14) brightness(.78); transform: scale(1.02); object-position: 60% 70%; }
+.crop-erdbeere.story-step-3 .story-photo-wash, .crop-erdbeere.story-step-4 .story-photo-wash { opacity: .35; }
 .sun-glow { position: absolute; width: 220px; height: 220px; right: 8%; top: 8%; border-radius: 50%; background: rgba(255,246,199,.72); filter: blur(8px); }
 .soil-line { position: absolute; width: 130%; height: 80px; left: -15%; bottom: 8%; border-radius: 50%; border-top: 20px solid #7a5a43; transform: rotate(-5deg); }
 .soil-line-back { bottom: 20%; opacity: .55; transform: rotate(3deg); }
@@ -108,7 +119,10 @@ button, input { font: inherit; }
 .berry i { position: absolute; width: 62px; height: 30px; top: -12px; left: 12px; background: #41693a; clip-path: polygon(50% 35%, 75% 0, 70% 45%, 100% 50%, 68% 65%, 60% 100%, 48% 68%, 25% 100%, 30% 65%, 0 48%, 35% 43%, 25% 0); }
 .plant-fruit .berry, .plant-basket .berry { opacity: 1; transform: translateX(-50%) scale(1); }
 .plant-fruit .blossom, .plant-basket .blossom { opacity: 0; }
-.visual-caption { position: absolute; left: 32px; bottom: 26px; padding: 8px 12px; background: rgba(255,255,255,.75); backdrop-filter: blur(10px); font-size: 12px; }
+.visual-caption { position: absolute; z-index: 3; left: 32px; bottom: 26px; padding: 8px 12px; background: rgba(255,255,255,.75); backdrop-filter: blur(10px); font-size: 12px; }
+.scroll-hint { position: absolute; z-index: 3; right: 28px; bottom: 28px; display: flex; align-items: center; gap: 8px; padding: 8px 11px; background: rgba(30,36,27,.66); color: white; backdrop-filter: blur(10px); font-size: 11px; }
+.scroll-hint span { display: block; width: 5px; height: 18px; border: 1px solid rgba(255,255,255,.7); border-radius: 5px; position: relative; }
+.scroll-hint span:after { content: ""; position: absolute; top: 3px; left: 1px; width: 1px; height: 5px; background: white; animation: scroll-dot 1.6s ease-in-out infinite; }
 
 .farm { padding: 150px 0; }
 .section-heading.compact { display: grid; grid-template-columns: .5fr 1.5fr; align-items: start; }
@@ -172,6 +186,8 @@ footer div > span, footer div > a { color: rgba(255,255,255,.65); line-height: 1
 .mobile-bar { display: none; }
 
 @keyframes hero-settle { from { opacity: .4; transform: scale(1.08); } to { opacity: 1; transform: scale(1.015); } }
+@keyframes stage-enter { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes scroll-dot { 0%, 100% { transform: translateY(0); opacity: .4; } 50% { transform: translateY(7px); opacity: 1; } }
 
 @media (max-width: 1050px) {
   .site-header { grid-template-columns: 1fr auto; padding: 0 26px; }
@@ -211,12 +227,15 @@ footer div > span, footer div > a { color: rgba(255,255,255,.65); line-height: 1
   .product-title h3 { font-size: 34px; }
   .product-row > p { display: none; }
   .product-row > a { width: 38px; height: 38px; }
-  .crop-shell { display: flex; flex-direction: column; width: 100%; min-height: 0; }
+  .crop-story { min-height: 420vh; }
+  .crop-sticky { min-height: 100svh; align-items: stretch; }
+  .crop-shell { display: flex; flex-direction: column; width: 100%; min-height: 100svh; }
   .crop-copy { padding: 85px 18px 48px; }
   .crop-copy h2 { font-size: 50px; }
   .crop-tabs { overflow-x: auto; padding-bottom: 4px; }
   .stage-copy { margin-top: 42px; }
-  .crop-visual { min-height: 520px; }
+  .crop-visual { min-height: 44svh; }
+  .scroll-hint { display: none; }
   .experience-grid { display: block; }
   .experience-grid article { min-height: 420px; margin-bottom: 14px; }
   .experience-main { padding: 28px; }.experience-main h3 { font-size: 39px; }
