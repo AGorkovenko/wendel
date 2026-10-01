@@ -1,164 +1,44 @@
-import Image from "next/image";
-import Link from "next/link";
-import { ArrowIcon, PinIcon, SunIcon } from "@/components/icons";
-import { CropStory } from "@/components/crop-story";
+import { FilmHero } from "@/components/film-hero";
+import { PinIcon } from "@/components/icons";
 
+const origin = "https://spargelhof-wendel.de";
 const products = [
-  { name: "Spargel", meta: "April — Juni", className: "product-asparagus", copy: "Tagesfrisch gestochen. Weiß oder grün, zart und aromatisch." },
-  { name: "Erdbeeren", meta: "Mai — Juni", className: "product-strawberry", copy: "Sonnengereift und von Hand direkt ins Körbchen gepflückt." },
-  { name: "Himbeeren", meta: "Mai — Juli", className: "product-raspberry", copy: "Geschützt gewachsen, behutsam geerntet, voll im Geschmack." },
+  { name: "Spargel", season: "Der Geschmack des Frühlings", text: "Frisch gestochen, behutsam sortiert. Unser Spargel wächst im milden Klima der Bergstraße.", href: "/spargel-aus-zwingenberg/", position: "left" },
+  { name: "Erdbeeren", season: "Sonne im Körbchen", text: "Am Strauch gereift und von Hand gepflückt. So kommt der volle Geschmack bei Ihnen an.", href: "/sonnengereifte-erdbeeren/", position: "center" },
+  { name: "Himbeeren", season: "Klein, zart, voller Aroma", text: "Geschützt gewachsen und mit Fingerspitzengefühl geerntet. Beere für Beere ein Genuss.", href: "/aromatische-himbeeren/", position: "right" },
 ];
 
 export default function Home() {
   return (
     <main>
-      <header className="site-header">
-        <Link className="brand" href="#top" aria-label="Wendel Startseite">
-          <span className="brand-mark">W</span>
-          <span><strong>Wendel</strong><small>Spargel & Obsthof</small></span>
-        </Link>
-        <nav aria-label="Hauptnavigation">
-          <Link href="#ernte">Produkte</Link>
-          <Link href="#standorte">Verkaufsstellen</Link>
-          <Link href="#hof">Hof erleben</Link>
-          <Link href="#verantwortung">Nachhaltigkeit</Link>
-          <Link href="#familie">Über uns</Link>
-        </nav>
-        <Link className="header-cta" href="#standorte"><PinIcon /> Stand finden</Link>
-        <button className="menu-button" aria-label="Menü öffnen"><span /><span /></button>
-      </header>
-
-      <section className="hero" id="top">
-        <Image
-          className="hero-image"
-          src="/images/concepts/wendel-hero-art-direction-v1.png"
-          alt="Feld mit Erdbeeren und Spargel an der Bergstraße im Morgenlicht"
-          fill
-          priority
-          sizes="100vw"
-        />
-        <div className="hero-wash" />
-        <div className="hero-content">
-          <div className="season-pill"><span /> Unsere Saison ist beendet</div>
-          <h1>Frisch gewachsen.<br />Nah genossen.</h1>
-          <p>Spargel, Erdbeeren und Himbeeren von der Bergstraße — seit 1986 mit Sorgfalt angebaut.</p>
-          <div className="hero-actions">
-            <Link className="button button-primary" href="#standorte"><PinIcon /> Verkaufsstand finden</Link>
-            <Link className="text-link" href="#hof">Hof erleben <ArrowIcon /></Link>
-          </div>
-        </div>
-        <div className="hero-index"><span>49.723° N</span><span>Zwingenberg</span></div>
-      </section>
-
-      <section className="today-strip" aria-label="Heute bei Wendel">
-        <div className="today-title"><SunIcon /><span>Heute bei Wendel</span></div>
-        <div><span>Hofladen</span><strong>Saisonpause</strong></div>
-        <div><span>Hof-Café</span><strong>Saisonpause</strong></div>
-        <div><span>Selbstpflücken</span><strong>Ab Mitte Mai</strong></div>
-        <Link href="#standorte">Alle Zeiten <ArrowIcon /></Link>
-      </section>
-
-      <section className="harvest section-shell" id="ernte">
-        <div className="section-heading">
-          <p className="section-kicker">Unsere Ernte</p>
-          <h2>Drei Kulturen.<br />Ein Anspruch.</h2>
-          <p>Reif geerntet, kurz transportiert und so frisch wie möglich verkauft.</p>
-        </div>
-        <div className="product-list">
-          {products.map((product, index) => (
-            <article className={`product-row ${product.className}`} key={product.name}>
-              <span className="product-number">0{index + 1}</span>
-              <div className="product-orbit"><i /></div>
-              <div className="product-title"><h3>{product.name}</h3><span>{product.meta}</span></div>
-              <p>{product.copy}</p>
-              <Link href="#vom-feld" aria-label={`Mehr über ${product.name}`}><ArrowIcon size={24} /></Link>
-            </article>
-          ))}
+      <a className="access-skip" href="#ernte">Zum Inhalt springen</a>
+      <FilmHero />
+      <section className="harvest page-width" id="ernte">
+        <div className="harvest-heading"><h2>Die gute Zeit<br />hat ihren Geschmack.</h2><p>Spargel, Erdbeeren und Himbeeren aus eigenem Anbau. Direkt von der Bergstraße, mit kurzen Wegen und viel Sorgfalt.</p></div>
+        <div className="produce-grid">
+          {products.map(product => <article className={`produce produce-${product.position}`} key={product.name}>
+            <a className="produce-photo" href={`${origin}${product.href}`} aria-label={`Mehr über ${product.name}`}><img src="/images/storyboards/dual-crop-16x9/08-studio-three-boxes.png" alt={`Frische ${product.name} in einer Wendel-Box`} width="1920" height="1080" loading="lazy" /></a>
+            <div className="produce-title"><h3>{product.name}</h3><a href={`${origin}${product.href}`} aria-label={`Mehr über ${product.name}`}><span aria-hidden="true">↗</span></a></div>
+            <p className="produce-season">{product.season}</p><p>{product.text}</p>
+          </article>)}
         </div>
       </section>
-
-      <CropStory />
-
-      <section className="farm section-shell" id="hof">
-        <div className="section-heading compact">
-          <p className="section-kicker">Hof erleben</p>
-          <h2>Ein guter Ort für eine kleine Pause.</h2>
-        </div>
-        <div className="experience-grid">
-          <article className="experience-main">
-            <div className="experience-art café-art"><span className="cup" /><span className="cake" /></div>
-            <div><span>Hofladen & Hof-Café</span><h3>Feldfrisch einkaufen. Hausgemacht genießen.</h3><Link href="#standorte">Besuch planen <ArrowIcon /></Link></div>
-          </article>
-          <article className="experience-card pick-card">
-            <div className="experience-art berry-basket"><i /><i /><i /><i /></div>
-            <span>Selbstpflücken</span><h3>Naschen ausdrücklich erlaubt.</h3>
-          </article>
-          <article className="experience-card play-card">
-            <div className="experience-art hill-art"><i /></div>
-            <span>Für Familien</span><h3>Spielen mit Blick auf den Melibokus.</h3>
-          </article>
+      <section className="farm-story" id="hof">
+        <div className="farm-photo"><img src="/images/concepts/wendel-hero-art-direction-v1.png" alt="Spargel- und Erdbeerreihen im Morgenlicht an der Bergstraße" width="1942" height="809" loading="lazy" /><span>Zuhause an der Bergstraße.</span></div>
+        <div className="farm-copy"><span className="little-flower" aria-hidden="true">✳</span><h2>Ein Stück Land.<br />Ein Stück Zuhause.</h2><p>In Zwingenberg sind unsere Felder und unsere Familie zu Hause. Hier begleiten wir unsere Früchte vom Pflanzen bis zur Ernte. Und freuen uns, wenn Sie vorbeischauen.</p><a className="button button-white" href={`${origin}/das-unternehmen/`}>Die Familie kennenlernen</a></div>
+      </section>
+      <section className="visit page-width" id="besuch">
+        <div className="visit-heading"><h2>Bleiben Sie<br />ein bisschen.</h2><p>Ein Einkauf im Hofladen, ein Stück Kuchen oder ein Körbchen selbst gepflückte Beeren. Manchmal liegt das Gute ganz nah.</p></div>
+        <div className="visit-options">
+          <a href={`${origin}/verkauf-hofladen-hof-cafe/`}><span className="visit-symbol" aria-hidden="true">☕</span><div><h3>Hofladen & Café</h3><p>Feldfrisch einkaufen. Hausgemacht genießen.</p></div><span aria-hidden="true">↗</span></a>
+          <a href={`${origin}/verkauf-hofladen-hof-cafe/`}><span className="visit-symbol" aria-hidden="true">✿</span><div><h3>Selbst pflücken</h3><p>Mitten im Feld schmeckt der Sommer am besten.</p></div><span aria-hidden="true">↗</span></a>
+          <a href={`${origin}/nachhaltigkeit-umweltschutz/`}><span className="visit-symbol" aria-hidden="true">❋</span><div><h3>Mit der Natur arbeiten</h3><p>Nützlinge, bewusste Bewässerung und Sonnenenergie.</p></div><span aria-hidden="true">↗</span></a>
         </div>
       </section>
-
-      <section className="responsibility" id="verantwortung">
-        <div className="section-shell responsibility-grid">
-          <div>
-            <p className="section-kicker">Landwirtschaft weiter gedacht</p>
-            <h2>Verantwortung, die mitwächst.</h2>
-            <p>Moderne Landwirtschaft und Naturschutz gehören für uns zusammen — auf dem Feld, bei der Energie und in jeder Verpackung.</p>
-            <Link className="text-link light" href="#">Wie wir arbeiten <ArrowIcon /></Link>
-          </div>
-          <div className="proof-grid">
-            <article><strong>440</strong><span>kW Sonnenenergie auf dem Hof</span></article>
-            <article><strong>7</strong><span>Jahre nutzen wir unsere Folien</span></article>
-            <article><strong>100%</strong><span>recycelbare Obstschalen</span></article>
-            <article className="bee-proof"><span className="bee">✦</span><span>Blühwiesen & Nützlinge</span></article>
-          </div>
-        </div>
+      <section className="find-us">
+        <div className="page-width find-grid"><div><PinIcon size={32} /><h2>Wir sind<br />ganz in Ihrer Nähe.</h2><a className="button button-green" href={`${origin}/verkauf-hofladen-hof-cafe/`}>Verkaufsstellen & Öffnungszeiten</a></div><div className="address"><p>Besuchen Sie uns auf dem Hof</p><h3>Spargelhof 1<br />64673 Zwingenberg</h3><a href="https://www.google.com/maps/search/?api=1&query=Spargelhof+1+64673+Zwingenberg" target="_blank" rel="noreferrer">Route planen <span aria-hidden="true">↗</span></a><p className="season-note">Wir freuen uns auf Ihren Besuch während der Saison. Aktuelle Öffnungszeiten und Pflücktermine finden Sie auf unserer Hofseite.</p></div></div>
       </section>
-
-      <section className="family section-shell" id="familie">
-        <div className="family-year">1986</div>
-        <div className="family-copy">
-          <p className="section-kicker">Familie Wendel</p>
-          <h2>Aus Erfahrung gewachsen.</h2>
-          <p>Was mit kleinen Mengen Spargel begann, ist heute ein Familienbetrieb mit 102 Hektar Anbaufläche — geführt von Florian, Chantal und Sigrid Wendel.</p>
-          <Link className="text-link" href="#">Unsere Geschichte <ArrowIcon /></Link>
-        </div>
-      </section>
-
-      <section className="visit" id="standorte">
-        <div className="visit-copy">
-          <p className="section-kicker">Erntefrisch in Ihrer Nähe</p>
-          <h2>Wo dürfen wir Sie begrüßen?</h2>
-          <form className="location-search">
-            <PinIcon size={22} />
-            <label className="sr-only" htmlFor="location">Ort oder Postleitzahl</label>
-            <input id="location" placeholder="Ort oder Postleitzahl" />
-            <button type="submit" aria-label="Standort suchen"><ArrowIcon size={22} /></button>
-          </form>
-          <p className="form-note">Findet die fünf nächstgelegenen Verkaufsstände.</p>
-        </div>
-        <div className="visit-map" aria-hidden="true">
-          <span className="map-road road-a" /><span className="map-road road-b" /><span className="map-road road-c" />
-          <i className="map-pin pin-a" /><i className="map-pin pin-b" /><i className="map-pin pin-c" /><i className="map-pin pin-d" />
-          <strong>Zwingenberg</strong>
-        </div>
-      </section>
-
-      <footer>
-        <div className="footer-brand"><span className="brand-mark">W</span><h2>Bis bald<br />auf dem Hof.</h2></div>
-        <div><strong>Spargel & Obsthof Wendel</strong><span>Spargelhof 1<br />64673 Zwingenberg</span></div>
-        <div><strong>Kontakt</strong><a href="tel:+49625179304">06251 79304</a><a href="mailto:info@spargel-wendel.de">info@spargel-wendel.de</a></div>
-        <div><strong>Mehr</strong><a href="#ernte">Produkte</a><a href="#hof">Hof erleben</a><a href="#verantwortung">Nachhaltigkeit</a><a href="#">Jobs</a></div>
-        <div className="footer-bottom"><span>© 2026 Wendel</span><span>Impressum · Datenschutz · Cookies</span></div>
-      </footer>
-
-      <nav className="mobile-bar" aria-label="Schnellzugriff">
-        <a href="#standorte"><PinIcon /><span>Stand</span></a>
-        <a href="#top"><SunIcon /><span>Heute</span></a>
-        <a href="tel:+49625179304"><span className="phone-icon">⌕</span><span>Anrufen</span></a>
-      </nav>
+      <footer className="footer page-width"><div className="footer-top"><img src="/brand/wendel.png" width="400" height="310" alt="Spargel & Obsthof Wendel" /><p>Gutes wächst<br />ganz in der Nähe.</p><div><a href="tel:+49625179304">06251 79304</a><a href="mailto:info@spargel-wendel.de">info@spargel-wendel.de</a></div></div><div className="footer-bottom"><span>© {new Date().getFullYear()} Spargel & Obsthof Wendel</span><nav aria-label="Rechtliches"><a href={`${origin}/impressum/`}>Impressum</a><a href={`${origin}/datenschutzerklaerung/`}>Datenschutz</a></nav><a href="#top">Nach oben ↑</a></div></footer>
     </main>
   );
 }

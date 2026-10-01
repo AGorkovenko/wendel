@@ -1,5 +1,4 @@
 import "@fontsource-variable/instrument-sans";
-import "@fontsource-variable/newsreader";
 import "./globals.css";
 
 export const metadata = {
