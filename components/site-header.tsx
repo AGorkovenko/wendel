@@ -15,12 +15,11 @@ export function SiteHeader() {
       raf = 0;
       const film = document.getElementById("top");
       if (!film) return;
-      const end = film.offsetHeight - innerHeight;
       const y = -film.getBoundingClientRect().top;
       setTheme(
-        y < 70 && !film.classList.contains("is-static")
+        y < 70 && film.dataset.chapter === "0"
           ? "opening"
-          : y >= end - 20
+          : film.getBoundingClientRect().bottom <= 104
             ? "content"
             : "hidden",
       );
@@ -31,7 +30,10 @@ export function SiteHeader() {
     const observer = new MutationObserver(queue);
     const film = document.getElementById("top");
     if (film)
-      observer.observe(film, { attributes: true, attributeFilter: ["class"] });
+      observer.observe(film, {
+        attributes: true,
+        attributeFilter: ["data-chapter"],
+      });
     window.addEventListener("scroll", queue, { passive: true });
     window.addEventListener("resize", queue);
     update();
