@@ -1,0 +1,725 @@
+/* Harvest campaign: isolated crops rather than interchangeable photo cards. */
+.harvest {
+  padding-block: 112px 100px;
+}
+.harvest .section-heading h2 {
+  font-size: clamp(48px, 6.1vw, 88px);
+}
+.harvest .section-heading > p {
+  max-width: 32ch;
+}
+.produce-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  margin-top: 70px;
+}
+.produce-strawberries {
+  padding-top: 0;
+}
+.produce-title {
+  margin-bottom: 24px;
+}
+.produce-title h3 {
+  font-size: clamp(30px, 3vw, 44px);
+  font-weight: 500;
+  letter-spacing: -0.05em;
+}
+.produce-title > span {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 5px;
+}
+.produce-photo {
+  aspect-ratio: 1;
+  overflow: visible;
+  border-radius: 50% 50% 5px 5px;
+  background: #edf3e7;
+}
+.produce-strawberries .produce-photo {
+  background: #fae9e9;
+}
+.produce-raspberries .produce-photo {
+  background: #f2e7ef;
+}
+.produce-photo img {
+  object-fit: contain;
+  padding: 16px;
+  transform: translateY(-8px);
+  filter: drop-shadow(0 12px 10px #16382a10);
+}
+.produce-photo:hover img {
+  transform: translateY(-16px) rotate(-2deg);
+}
+.photo-link {
+  bottom: 16px;
+  right: 16px;
+}
+.produce-copy {
+  padding-top: 17px;
+}
+.produce-detail {
+  margin-block: 0 10px;
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--ink);
+}
+.produce-copy > p:not(.produce-detail) {
+  color: var(--muted);
+  font-size: 14px;
+  max-width: 34ch;
+}
+.produce-copy .text-link {
+  margin-top: 15px;
+  color: var(--green);
+  font-size: 13px;
+}
+.harvest-foot {
+  margin-top: 40px;
+}
+.season-inner {
+  padding-block: 22px;
+}
+
+/* A day at Wendel: one generous field invitation and two editorial stories. */
+.visit-section {
+  background: #f5f7f2;
+  padding-block: 110px;
+}
+.visit-section .section-heading {
+  margin-bottom: 56px;
+}
+.field-invitation {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  min-height: 560px;
+  background: var(--green);
+  color: white;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.field-copy {
+  padding: 55px clamp(30px, 5vw, 72px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+.field-tag {
+  color: #d9e9c8;
+  font-size: 13px;
+  margin-bottom: 28px;
+}
+.field-copy h3 {
+  font-size: clamp(40px, 4.5vw, 66px);
+  font-weight: 500;
+  line-height: 1.04;
+  letter-spacing: -0.05em;
+}
+.field-copy > p {
+  max-width: 36ch;
+  font-size: 15px;
+  margin-block: 25px 28px;
+  color: #ffffffdc;
+}
+.field-copy > small {
+  font-size: 11px;
+  color: #d9e9c8;
+  margin-top: 16px;
+}
+.field-photo {
+  position: relative;
+  min-height: 540px;
+}
+.field-photo > img {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  object-fit: cover;
+  object-position: 50% 45%;
+}
+.field-photo > span {
+  position: absolute;
+  right: 30px;
+  bottom: 30px;
+  color: var(--ink);
+  background: var(--gold);
+  padding: 20px 26px;
+  border-radius: 50%;
+  font-family: "Newsreader Variable", serif;
+  font-size: 28px;
+  transform: rotate(-9deg);
+}
+.visit-grid {
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  margin-top: 80px;
+}
+.cafe-image,
+.shop-image {
+  height: 330px;
+  border-radius: 5px;
+  position: relative;
+}
+.cafe-image {
+  overflow: visible;
+  margin-right: 34px;
+}
+.cafe-image > img:first-child {
+  width: 100%;
+  border-radius: 5px;
+}
+.cafe-image > .cafe-cake {
+  width: 30%;
+  height: 54%;
+  top: auto;
+  bottom: -20px;
+  right: -34px;
+  border: 6px solid #f5f7f2;
+  border-radius: 5px;
+}
+.shop-image > img:first-child {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+}
+.shop-image {
+  margin-right: 34px;
+}
+.shop-preserves {
+  position: absolute;
+  right: -34px;
+  bottom: -20px;
+  width: 30%;
+  height: 54%;
+  border: 6px solid #f5f7f2;
+  border-radius: 5px;
+  object-fit: cover;
+}
+.visit-copy {
+  margin-top: 40px;
+}
+.visit-copy h3 {
+  font-size: clamp(34px, 3.4vw, 48px);
+}
+.visit-copy > p {
+  max-width: 44ch;
+  font-size: 15px;
+}
+
+/* Real people are the proof. No synthetic family portraits. */
+.family-section {
+  grid-template-columns: 1.12fr 1fr;
+  min-height: 690px;
+}
+.family-photos {
+  min-height: 690px;
+}
+.family-photo {
+  object-position: 30% center;
+}
+.family-photo-label {
+  position: absolute;
+  bottom: 28px;
+  left: 32px;
+  color: white;
+  background: #16382acc;
+  padding: 11px 18px;
+  border-radius: 30px;
+  font-size: 12px;
+}
+.family-copy {
+  padding: 62px clamp(30px, 5vw, 72px);
+  position: relative;
+}
+.family-copy h2 {
+  font-size: clamp(44px, 4.7vw, 68px);
+}
+.family-copy > p:not(.section-kicker) {
+  font-size: 15px;
+}
+.family-signoff {
+  margin-top: 32px;
+}
+.family-year {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+  margin-top: 35px;
+  padding-top: 25px;
+  border-top: 1px solid #ffffff45;
+  width: 100%;
+  color: #d9e9c8;
+}
+.family-year strong {
+  font-size: 48px;
+  letter-spacing: -0.06em;
+  font-weight: 400;
+  line-height: 1;
+}
+.family-year span {
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.nature-section {
+  padding-block: 125px;
+  gap: 90px;
+}
+.nature-photo {
+  aspect-ratio: 0.9;
+  border-radius: 50% 50% 5px 5px;
+}
+.nature-photo > img {
+  object-position: 65% center;
+}
+.nature-photo-label {
+  position: absolute;
+  bottom: 28px;
+  left: 30px;
+  font-size: 30px;
+  font-family: "Newsreader Variable", serif;
+  line-height: 1.1;
+  color: white;
+  text-shadow: 0 1px 10px #16382a;
+}
+.nature-copy > p:not(.section-kicker) {
+  font-size: 15px;
+}
+.nature-practices li {
+  padding-block: 21px;
+}
+.nature-copy h2 {
+  font-size: clamp(42px, 4.9vw, 70px);
+}
+
+/* Practical information gets a destination photo, not a fictional map. */
+.contact-section {
+  background: #edf3e7;
+  padding-block: 100px;
+}
+.contact-grid {
+  gap: 80px;
+  align-items: stretch;
+}
+.contact-invitation h2 {
+  font-size: clamp(42px, 4.6vw, 66px);
+}
+.route-photo {
+  display: block;
+  margin-top: 35px;
+  position: relative;
+  overflow: hidden;
+  height: 220px;
+  border-radius: 5px;
+}
+.route-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 55%;
+}
+.route-photo > span {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  right: 15px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  border-radius: 30px;
+  background: white;
+  padding: 13px 18px;
+  font-size: 13px;
+}
+.route-photo > span > svg:last-child {
+  margin-left: auto;
+}
+.visit-info {
+  border-radius: 120px 5px 5px 5px;
+  padding: 65px 40px 38px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.visit-info h3 {
+  font-size: 28px;
+}
+.info-top {
+  flex-wrap: wrap;
+  font-size: 11px;
+}
+.visit-info address {
+  font-size: 17px;
+}
+.hours {
+  font-size: 13px;
+  padding-block: 24px;
+  gap: 18px;
+}
+.visit-info > .text-link {
+  align-self: start;
+}
+.faq-section {
+  padding-block: 110px 70px;
+}
+.faq-list summary {
+  padding-block: 29px;
+}
+.jobs-strip {
+  padding-block: 32px 45px;
+}
+.footer {
+  background: #075535;
+  padding-top: 80px;
+}
+.footer-top > p {
+  font-size: clamp(52px, 6.8vw, 96px);
+}
+.footer-grid {
+  margin-top: 70px;
+}
+.footer-grid p,
+.footer-grid a {
+  font-size: 13px;
+}
+
+@media (max-width: 1000px) {
+  .produce-grid {
+    gap: 20px;
+  }
+  .field-copy {
+    padding: 38px;
+  }
+  .field-copy h3 {
+    font-size: 46px;
+  }
+  .visit-grid {
+    gap: 36px;
+  }
+  .cafe-image,
+  .shop-image {
+    height: 280px;
+  }
+  .nature-section,
+  .contact-grid {
+    gap: 45px;
+  }
+  .visit-info {
+    padding: 55px 28px 32px;
+  }
+}
+@media (max-width: 760px) {
+  .harvest,
+  .visit-section,
+  .nature-section {
+    padding-block: 80px;
+  }
+  .produce-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: 45px;
+  }
+  .produce-title h3 {
+    font-size: 27px;
+  }
+  .produce-title > span {
+    font-size: 10px;
+  }
+  .produce-detail {
+    font-size: 12px;
+  }
+  .produce-copy > p:not(.produce-detail) {
+    font-size: 12px;
+  }
+  .produce-copy .text-link {
+    font-size: 11px;
+    gap: 8px;
+  }
+  .photo-link {
+    width: 36px;
+    height: 36px;
+    bottom: 8px;
+    right: 8px;
+  }
+  .field-invitation {
+    min-height: 480px;
+  }
+  .field-copy {
+    padding: 30px;
+  }
+  .field-copy h3 {
+    font-size: 36px;
+  }
+  .field-tag {
+    font-size: 11px;
+    margin-bottom: 20px;
+  }
+  .field-copy > p {
+    font-size: 13px;
+  }
+  .field-photo {
+    min-height: 480px;
+  }
+  .field-photo > span {
+    font-size: 21px;
+    padding: 15px;
+    right: 18px;
+  }
+  .visit-grid {
+    margin-top: 55px;
+  }
+  .cafe-image,
+  .shop-image {
+    height: 230px;
+    margin-right: 18px;
+  }
+  .cafe-image > .cafe-cake,
+  .shop-preserves {
+    right: -18px;
+    border-width: 4px;
+  }
+  .visit-copy h3 {
+    font-size: 32px;
+  }
+  .visit-copy > p {
+    font-size: 13px;
+  }
+  .family-section {
+    grid-template-columns: 1fr;
+  }
+  .family-photos {
+    min-height: 500px;
+  }
+  .family-copy {
+    padding: 55px 32px;
+  }
+  .family-copy h2 {
+    font-size: 60px;
+  }
+  .nature-section {
+    gap: 35px;
+  }
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+  .visit-info {
+    border-radius: 80px 5px 5px 5px;
+    padding: 50px 32px 32px;
+  }
+  .route-photo {
+    height: 250px;
+  }
+  .footer-top > p {
+    font-size: 54px;
+  }
+}
+@media (max-width: 520px) {
+  .harvest,
+  .visit-section,
+  .nature-section {
+    padding-block: 65px;
+  }
+  .harvest .section-heading h2 {
+    font-size: clamp(39px, 10.5vw, 54px);
+  }
+  .produce-grid {
+    grid-template-columns: 1fr;
+    gap: 42px;
+  }
+  .produce {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 18px;
+    align-items: center;
+  }
+  .produce-title {
+    grid-column: 1/-1;
+    margin-bottom: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .produce-title h3 {
+    font-size: 36px;
+  }
+  .produce-title > span {
+    font-size: 10px;
+    max-width: 15ch;
+    text-align: right;
+  }
+  .produce-photo {
+    align-self: start;
+    min-width: 0;
+  }
+  .produce-photo img {
+    padding: 7px;
+  }
+  .produce-copy {
+    padding-top: 0;
+  }
+  .produce-detail {
+    font-size: 13px;
+    margin-bottom: 9px;
+  }
+  .produce-copy > p:not(.produce-detail) {
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .produce-copy .text-link {
+    font-size: 11px;
+    margin-top: 9px;
+  }
+  .photo-link {
+    width: 30px;
+    height: 30px;
+  }
+  .photo-link svg {
+    width: 17px;
+  }
+  .field-invitation {
+    grid-template-columns: 1fr;
+    border-radius: 7px;
+  }
+  .field-copy {
+    padding: 35px 26px;
+  }
+  .field-copy h3 {
+    font-size: clamp(36px, 10vw, 46px);
+  }
+  .field-copy > p {
+    font-size: 14px;
+  }
+  .field-photo {
+    min-height: 370px;
+  }
+  .field-photo > img {
+    object-position: 50% 40%;
+  }
+  .visit-section .section-heading {
+    margin-bottom: 35px;
+  }
+  .visit-grid {
+    grid-template-columns: 1fr;
+    gap: 46px;
+  }
+  .cafe-image,
+  .shop-image {
+    height: 260px;
+    margin-right: 25px;
+  }
+  .cafe-image > .cafe-cake,
+  .shop-preserves {
+    right: -25px;
+    width: 31%;
+  }
+  .visit-copy h3 {
+    font-size: 38px;
+  }
+  .visit-copy > p {
+    font-size: 14px;
+  }
+  .family-photos {
+    min-height: 350px;
+  }
+  .family-photo {
+    object-position: 30% center;
+  }
+  .family-photo-label {
+    bottom: 18px;
+    left: 20px;
+    font-size: 10px;
+  }
+  .family-copy {
+    padding: 42px 20px;
+  }
+  .family-copy h2 {
+    font-size: clamp(38px, 11vw, 49px);
+  }
+  .family-copy > p:not(.section-kicker) {
+    font-size: 14px;
+  }
+  .family-year strong {
+    font-size: 43px;
+  }
+  .nature-section {
+    grid-template-columns: 1fr;
+  }
+  .nature-photo {
+    aspect-ratio: 1;
+    border-radius: 50% 50% 5px 5px;
+  }
+  .nature-photo-label {
+    font-size: 26px;
+    bottom: 22px;
+    left: 22px;
+  }
+  .nature-copy h2 {
+    font-size: 44px;
+  }
+  .nature-practices li {
+    grid-template-columns: 105px 1fr;
+  }
+  .contact-section {
+    padding-block: 60px;
+  }
+  .contact-invitation h2 {
+    font-size: 40px;
+  }
+  .route-photo {
+    height: 195px;
+  }
+  .visit-info {
+    padding: 45px 24px 30px;
+    border-radius: 65px 5px 5px 5px;
+  }
+  .visit-info h3 {
+    font-size: 24px;
+  }
+  .hours {
+    font-size: 11px;
+  }
+  .faq-section {
+    padding-block: 65px 45px;
+  }
+  .faq-list summary {
+    padding-block: 23px;
+  }
+  .footer {
+    padding-top: 50px;
+  }
+  .footer-top {
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 22px;
+  }
+  .footer-top > p {
+    order: 3;
+    width: 100%;
+    font-size: 62px;
+    margin-top: 10px;
+  }
+  .footer-top > a:first-child {
+    width: 100px;
+  }
+  .footer-up {
+    width: 44px;
+    height: 44px;
+  }
+  .footer-grid {
+    margin-top: 40px;
+  }
+  .footer-grid p,
+  .footer-grid a {
+    font-size: 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .produce-photo img {
+    transition: none;
+  }
+  .produce-photo:hover img {
+    transform: translateY(-8px);
+  }
+}

@@ -2,6 +2,7 @@ import { FilmHero } from "@/components/film-hero";
 import { SiteHeader } from "@/components/site-header";
 import { ArrowIcon, PinIcon, SunIcon } from "@/components/icons";
 import { navigation, wendel } from "@/lib/wendel";
+import "./homepage.css";
 
 const products = [
   {
@@ -10,7 +11,7 @@ const products = [
     text: "Im milden Klima der Bergstraße gewachsen, mit Sorgfalt gestochen und direkt zu Ihnen.",
     href: "/spargel-aus-zwingenberg/",
     image: "asparagus",
-    alt: "Frisch geerntete weiße Spargelstangen vom Hof Wendel",
+    season: "Frühling auf dem Teller",
   },
   {
     name: "Erdbeeren",
@@ -18,7 +19,7 @@ const products = [
     text: "Rot bis ins Herz und voller Sommer. Unsere Erdbeeren dürfen reifen, bevor sie ins Körbchen kommen.",
     href: "/sonnengereifte-erdbeeren/",
     image: "strawberries",
-    alt: "Reife Erdbeeren in den originalen gelben Wendel-Schalen",
+    season: "So schmeckt der Sommer",
   },
   {
     name: "Himbeeren",
@@ -26,7 +27,7 @@ const products = [
     text: "Beere für Beere behutsam gepflückt. Für den kleinen Genuss direkt aus der Hand.",
     href: "/aromatische-himbeeren/",
     image: "raspberries",
-    alt: "Frische Himbeeren aus eigenem Anbau bei Wendel",
+    season: "Kleine Beere, großer Genuss",
   },
 ];
 
@@ -111,9 +112,9 @@ export default function Home() {
             <div>
               <p className="section-kicker">Frisch von unseren Feldern</p>
               <h2>
-                Drei gute Gründe,
+                Eine Saison.
                 <br />
-                sich zu freuen.
+                Drei Lieblingsstücke.
               </h2>
             </div>
             <p>
@@ -128,16 +129,24 @@ export default function Home() {
                 className={`produce produce-${product.image}`}
                 key={product.name}
               >
+                <div className="produce-title">
+                  <h3>
+                    <a href={`${wendel.origin}${product.href}`}>
+                      {product.name}
+                    </a>
+                  </h3>
+                  <span>{product.season}</span>
+                </div>
                 <a
                   className="produce-photo"
                   href={`${wendel.origin}${product.href}`}
                   aria-label={`${product.name}: mehr erfahren`}
                 >
                   <img
-                    src={`/images/wendel/${product.image}.webp`}
-                    alt={product.alt}
-                    width="1524"
-                    height="1080"
+                    src={`/images/generated/${product.image}-v1.webp`}
+                    alt={`Illustrative Produktaufnahme: ${product.name}`}
+                    width="1024"
+                    height="1024"
                     loading="lazy"
                   />
                   <span className="photo-link" aria-hidden="true">
@@ -145,13 +154,15 @@ export default function Home() {
                   </span>
                 </a>
                 <div className="produce-copy">
-                  <h3>
-                    <a href={`${wendel.origin}${product.href}`}>
-                      {product.name}
-                    </a>
-                  </h3>
                   <p className="produce-detail">{product.detail}</p>
                   <p>{product.text}</p>
+                  <a
+                    className="text-link"
+                    href={`${wendel.origin}${product.href}`}
+                  >
+                    Mehr über {product.name}
+                    <ArrowIcon />
+                  </a>
                 </div>
               </article>
             ))}
@@ -172,9 +183,9 @@ export default function Home() {
               <div>
                 <p className="section-kicker">Ein schöner Tag bei Wendel</p>
                 <h2>
-                  Kommen Sie fürs Gute.
+                  Heute mal
                   <br />
-                  Bleiben Sie ein bisschen.
+                  raus aufs Land.
                 </h2>
               </div>
               <p>
@@ -182,6 +193,39 @@ export default function Home() {
                 gepflückte Erdbeere. Ihr kleiner Ausflug ins Grüne beginnt hier.
               </p>
             </div>
+            <article className="field-invitation">
+              <div className="field-copy">
+                <span className="field-tag">
+                  Erdbeeren & Himbeeren selbst pflücken
+                </span>
+                <h3>
+                  Die schönsten
+                  <br />
+                  Erinnerungen
+                  <br />
+                  wachsen draußen.
+                </h3>
+                <p>
+                  Raus ins Feld. Rein ins Sommerglück. Füllen Sie Ihr Körbchen
+                  mit Beeren – und den Tag mit Zeit füreinander.
+                </p>
+                <a className="button button-white" href={wendel.picking}>
+                  Pflücktermine entdecken
+                  <ArrowIcon />
+                </a>
+                <small>In der Hochsaison · wetterabhängig</small>
+              </div>
+              <div className="field-photo">
+                <img
+                  src="/images/wendel/self-pick.webp"
+                  alt="Ein Kind mit frisch gepflückten Erdbeeren auf einem Wendel-Feld"
+                  width="536"
+                  height="800"
+                  loading="lazy"
+                />
+                <span>Naschen erlaubt.</span>
+              </div>
+            </article>
             <div className="visit-grid">
               <article className="cafe-story">
                 <div className="cafe-image">
@@ -200,9 +244,6 @@ export default function Home() {
                     height="1080"
                     loading="lazy"
                   />
-                  <span className="photo-caption">
-                    Die kleine Auszeit direkt am Hof.
-                  </span>
                 </div>
                 <div className="visit-copy">
                   <h3>
@@ -229,56 +270,40 @@ export default function Home() {
                     </a>
                   </div>
                 </div>
-                <a className="shop-teaser" href={wendel.shop}>
+              </article>
+              <article className="shop-story">
+                <div className="shop-image">
                   <img
+                    src="/images/wendel/farm-shop.webp"
+                    alt="Frische Wendel-Produkte im Hofladen"
+                    width="1524"
+                    height="1080"
+                    loading="lazy"
+                  />
+                  <img
+                    className="shop-preserves"
                     src="/images/wendel/preserves.webp"
-                    alt="Hausgemachte Wendel-Fruchtaufstriche"
+                    alt="Wendel-Fruchtaufstriche aus eigener Ernte"
                     width="600"
                     height="800"
                     loading="lazy"
                   />
-                  <div>
-                    <h4>Und ein bisschen Hof für zu Hause.</h4>
-                    <p>
-                      Fruchtaufstriche, Spargelsuppe, Weine und regionale
-                      Lieblingsstücke im Hofladen.
-                    </p>
-                  </div>
-                  <ArrowIcon size={23} />
-                </a>
-              </article>
-              <article className="picking-story">
-                <div className="picking-image">
-                  <img
-                    src="/images/wendel/self-pick.webp"
-                    alt="Eine Familie beim Erdbeerpflücken auf den Wendel-Feldern"
-                    width="536"
-                    height="800"
-                    loading="lazy"
-                  />
-                  <span className="picking-note">
-                    Naschen
-                    <br />
-                    erlaubt!
-                  </span>
                 </div>
                 <div className="visit-copy">
                   <h3>
-                    Sommerglück.
+                    Ein Körbchen voll.
                     <br />
-                    Selbst gepflückt.
+                    Ein bisschen mehr.
                   </h3>
                   <p>
-                    Ab ins Feld, Körbchen füllen und gemeinsam genießen.
-                    Erdbeeren und Himbeeren selbst zu pflücken ist ein Ausflug
-                    für die ganze Familie.
+                    Unsere Ernte und regionale Lieblingsstücke. Hausgemachte
+                    Fruchtaufstriche, Spargelsuppe, erlesene Weine und Secco –
+                    ein Stück Hof für zu Hause.
                   </p>
-                  <a className="text-link" href={wendel.picking}>
-                    Pflücktermine & Infos <ArrowIcon />
+                  <a className="text-link" href={wendel.shop}>
+                    Im Hofladen vorbeischauen
+                    <ArrowIcon />
                   </a>
-                  <p className="small-note">
-                    Nur in der Hochsaison, abhängig von Wetter und Reife.
-                  </p>
                 </div>
               </article>
             </div>
@@ -295,25 +320,16 @@ export default function Home() {
               height="810"
               loading="lazy"
             />
-            <div className="family-place">
-              <img
-                src="/images/wendel/farm.webp"
-                alt="Blühende Wiesen und die Bergstraße bei Zwingenberg"
-                width="1920"
-                height="1920"
-                loading="lazy"
-              />
-              <span>Hier sind wir zu Hause.</span>
-            </div>
+            <span className="family-photo-label">
+              Familie Wendel · Zwingenberg
+            </span>
           </div>
           <div className="family-copy">
             <p className="section-kicker">Die Menschen hinter der Ernte</p>
             <h2>
-              Ein Hof.
+              Unser Name.
               <br />
-              Eine Familie.
-              <br />
-              Viel Herz.
+              Unser Versprechen.
             </h2>
             <p>
               Seit 1986 bauen wir in Zwingenberg Spargel an. Erdbeeren und
@@ -330,19 +346,31 @@ export default function Home() {
             <div className="family-signoff">
               Der Bauer nach Ihrem Geschmack.
             </div>
+            <div className="family-year">
+              <strong>1986</strong>
+              <span>
+                Seitdem wächst
+                <br />
+                hier Gutes.
+              </span>
+            </div>
           </div>
         </section>
 
         <section className="nature-section page-width" id="natur">
           <div className="nature-photo">
             <img
-              src="/images/wendel/bee.webp"
-              alt="Ein Hummelvolk in einer Bestäubungsbox zwischen Erdbeerpflanzen auf dem Wendel-Hof"
+              src="/images/generated/pollination-v1.webp"
+              alt="Illustrative Nahaufnahme einer Hummel an einer Erdbeerblüte"
               width="1524"
               height="1080"
               loading="lazy"
             />
-            <span className="photo-caption">Unsere kleinsten Erntehelfer.</span>
+            <span className="nature-photo-label">
+              Kleine Helfer.
+              <br />
+              Große Wirkung.
+            </span>
           </div>
           <div className="nature-copy">
             <p className="section-kicker">Mit der Natur arbeiten</p>
@@ -396,25 +424,24 @@ export default function Home() {
                 <PinIcon />
                 Verkaufsstand finden <ArrowIcon />
               </a>
-              <div className="contact-illustration" aria-hidden="true">
-                <svg viewBox="0 0 520 135" fill="none">
-                  <path
-                    d="M0 112Q90 24 170 66Q210 18 275 64Q340-15 430 64Q470 42 520 65M0 128Q135 68 258 115Q390 70 520 116"
-                    stroke="currentColor"
-                    strokeWidth="1.4"
-                  />
-                  <path
-                    d="M334 103V58L364 36L394 58V94M329 59L364 32L399 59M353 101V77H374V98M345 65H354V71H345Z M376 65H385V71H376Z"
-                    stroke="currentColor"
-                    strokeWidth="1.4"
-                  />
-                  <path
-                    d="M40 104V72M25 79Q40 47 55 79Q40 97 25 79ZM453 109V77M439 84Q453 52 469 84Q453 100 439 84Z"
-                    stroke="currentColor"
-                    strokeWidth="1.4"
-                  />
-                </svg>
-              </div>
+              <a
+                className="route-photo"
+                href={wendel.route}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <img
+                  src="/images/wendel/farm.webp"
+                  alt="Blühende Landschaft an der Bergstraße bei Wendel"
+                  width="1920"
+                  height="1920"
+                  loading="lazy"
+                />
+                <span>
+                  <PinIcon /> Ihr Weg zum Hof
+                  <ArrowIcon />
+                </span>
+              </a>
             </div>
             <div className="visit-info">
               <div className="info-top">

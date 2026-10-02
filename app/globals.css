@@ -307,6 +307,15 @@ html:has(.mobile-menu[open]) {
 .film-still {
   opacity: 0;
 }
+.film-frame .film-reverse {
+  opacity: 0;
+}
+.film-frame[data-reversing="true"] > video:first-child {
+  opacity: 0;
+}
+.film-frame[data-reversing="true"] .film-reverse {
+  opacity: 1;
+}
 .film-still[data-visible="true"] {
   opacity: 1;
 }

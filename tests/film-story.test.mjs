@@ -4,10 +4,27 @@ import { existsSync } from "node:fs";
 import {
   ChapterWheelGesture,
   chapterTime,
+  chapterRequest,
   filmChapters,
   lastFilmChapter,
   transitionDuration,
 } from "../lib/film-story.ts";
+
+test("a fresh forward gesture is retained during playback", () => {
+  assert.equal(chapterRequest(2, 3, 1, true), "queue");
+  assert.equal(chapterRequest(2, 3, 1, false), "start");
+});
+
+test("a reversal interrupts immediately instead of being swallowed", () => {
+  assert.equal(chapterRequest(2, 1, 1, true), "interrupt");
+  assert.equal(chapterRequest(1, 2, -1, true), "interrupt");
+});
+
+test("chapter boundaries and same-chapter requests never queue", () => {
+  assert.equal(chapterRequest(0, -1, 1, true), "ignore");
+  assert.equal(chapterRequest(7, 8, 1, true), "ignore");
+  assert.equal(chapterRequest(2, 2, 1, true), "ignore");
+});
 
 test("one trackpad gesture triggers one chapter, including a long momentum tail", () => {
   const gesture = new ChapterWheelGesture();
@@ -23,6 +40,15 @@ test("a quiet gap arms the next intentional gesture", () => {
   assert.equal(gesture.push(80, 0).trigger, true);
   assert.equal(gesture.push(30, 100).trigger, false);
   assert.equal(gesture.push(80, 350).trigger, true);
+});
+
+test("a deliberate new stroke is recognized even before the momentum tail stops", () => {
+  const gesture = new ChapterWheelGesture();
+  gesture.push(80, 0);
+  for (let time = 16; time <= 600; time += 16)
+    assert.equal(gesture.push(2, time).trigger, false);
+  assert.equal(gesture.push(90, 616).trigger, true);
+  assert.equal(gesture.push(60, 632).trigger, false);
 });
 
 test("direction reversal can return to the previous chapter", () => {
@@ -62,6 +88,17 @@ test("checkpoints are ordered, match actual film time and have available still i
   assert.equal(chapterTime(3, 35.233333), 14.6);
   assert.ok(chapterTime(lastFilmChapter, 35.233333) < 35.233333);
   assert.equal(chapterTime(6, 20), 19.96);
+});
+
+test("both native playback companions exist while original films are preserved", () => {
+  for (const path of [
+    "media/hero-forward-v2.mp4",
+    "media/hero-reverse-v2.mp4",
+    "media/hero-scroll.mp4",
+    "images/storyboards/hero.mp4",
+  ]) {
+    assert.ok(existsSync(new URL(`../public/${path}`, import.meta.url)));
+  }
 });
 
 test("transitions have bounded duration in either direction", () => {

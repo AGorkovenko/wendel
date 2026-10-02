@@ -5,6 +5,7 @@ import { PinIcon } from "./icons";
 import {
   ChapterWheelGesture,
   chapterTime,
+  chapterRequest,
   filmChapters,
   lastFilmChapter,
   transitionDuration,
@@ -13,17 +14,27 @@ import {
 export function FilmHero() {
   const root = useRef<HTMLElement>(null);
   const video = useRef<HTMLVideoElement>(null);
+  const reverseVideo = useRef<HTMLVideoElement>(null);
   const navigate = useRef<(index: number) => void>(() => {});
   const [videoEnabled, setVideoEnabled] = useState(false);
   const [chapter, setChapter] = useState(0);
   const [moving, setMoving] = useState(false);
   const [still, setStill] = useState(true);
+  const [stillImage, setStillImage] = useState<string>(filmChapters[0].image);
+  const [reversing, setReversing] = useState(false);
   const ending = chapter === lastFilmChapter;
   const current = filmChapters[chapter];
 
   useEffect(() => {
     const section = root.current!;
     const media = video.current!;
+    const rewind = reverseVideo.current!;
+    let active = media;
+    let reverseActive = false;
+    let travel = 0;
+    let pending: number | null = null;
+    let exitRequested = false;
+    let generation = 0;
     const preference = matchMedia("(prefers-reduced-motion: reduce)");
     const gesture = new ChapterWheelGesture();
     let index = Number(section.dataset.chapter) || 0;
@@ -39,13 +50,21 @@ export function FilmHero() {
     let capturedKey = "";
 
     const atTop = () => Math.abs(section.getBoundingClientRect().top) < 2;
+    // Re-entering from the page, or a fractional native scroll, must not leave
+    // the controls inert. Only capture while most of the stage is visible.
+    const inStage = () => {
+      const top = section.getBoundingClientRect().top;
+      return top <= 2 && top > -Math.min(180, innerHeight * 0.25);
+    };
     const modalOpen = () => Boolean(document.querySelector("dialog[open]"));
     const canStep = (direction: number) =>
       direction > 0 ? index < lastFilmChapter : index > 0;
     const stop = () => {
+      generation++;
       cancelAnimationFrame(raf);
       clearTimeout(finishTimer);
       media.pause();
+      rewind.pause();
     };
     const settle = (animateEnding = true) => {
       stop();
@@ -54,6 +73,7 @@ export function FilmHero() {
         media.currentTime = chapterTime(index, media.duration);
       }
       setStill(true);
+      setStillImage(filmChapters[index].image);
       section.style.setProperty(
         "--finish",
         index === lastFilmChapter ? "1" : "0",
@@ -61,6 +81,22 @@ export function FilmHero() {
       const complete = () => {
         busy = false;
         setMoving(false);
+        const next = pending;
+        pending = null;
+        if (
+          exitRequested &&
+          index === lastFilmChapter &&
+          inStage() &&
+          !modalOpen()
+        ) {
+          exitRequested = false;
+          window.scrollTo({
+            top: section.offsetTop + section.offsetHeight,
+            behavior: preference.matches ? "instant" : "smooth",
+          });
+          return;
+        }
+        if (next !== null && inStage() && !modalOpen()) go(next);
       };
       if (index === lastFilmChapter && animateEnding && !preference.matches) {
         finishTimer = setTimeout(complete, 850);
@@ -68,15 +104,29 @@ export function FilmHero() {
     };
 
     const go = (next: number) => {
-      if (busy || next === index || next < 0 || next > lastFilmChapter) return;
+      const request = chapterRequest(index, next, travel, busy);
+      if (request === "ignore") return;
+      if (request === "queue") {
+        pending = next;
+        return;
+      }
       // Chapter buttons may be used while the introduction is partly scrolled
       // out of view. Return its stage to fullscreen before starting the story.
       if (!atTop())
         window.scrollTo({ top: section.offsetTop, behavior: "instant" });
-      const from = Number.isFinite(media.currentTime)
-        ? media.currentTime
-        : filmChapters[index].time;
+      const from =
+        busy && active.readyState >= 2 && Number.isFinite(active.duration)
+          ? reverseActive
+            ? rewind.duration - active.currentTime
+            : active.currentTime
+          : filmChapters[index].time;
+      stop();
+      const token = generation;
+      pending = null;
+      exitRequested = false;
+      const previous = index;
       index = next;
+      travel = Math.sign(next - previous);
       busy = true;
       setChapter(index);
       setMoving(true);
@@ -90,49 +140,60 @@ export function FilmHero() {
         preference.matches ||
         failed ||
         media.readyState < 2 ||
-        !Number.isFinite(media.duration)
+        !Number.isFinite(media.duration) ||
+        Math.abs(next - previous) > 1
       ) {
         settle(false);
         return;
       }
-      setStill(false);
       const target = chapterTime(index, media.duration);
       const duration = transitionDuration(from, target);
-      const started = performance.now();
-      let lastSeek = 0;
-      // Adjacent forward chapters use the browser's smooth video decoder.
-      // Rewind and long chapter jumps use bounded seeking instead.
-      let playing = target > from && (target - from) / (duration / 1000) <= 4;
-      if (playing) {
-        media.playbackRate = Math.max(1, (target - from) / (duration / 1000));
-        void media.play().catch(() => {
-          playing = false;
-        });
+      reverseActive = target < from;
+      active = reverseActive ? rewind : media;
+      // Reverse is encoded as a companion film: native decoding in both
+      // directions, never dozens of asynchronous seeks per second.
+      if (active.readyState < 2 || !Number.isFinite(active.duration)) {
+        settle(false);
+        return;
       }
+      const nativeFrom = reverseActive ? rewind.duration - from : from;
+      const nativeTarget = reverseActive ? rewind.duration - target : target;
+      active.currentTime = Math.max(
+        0,
+        Math.min(nativeFrom, active.duration - 0.04),
+      );
+      active.playbackRate = Math.min(
+        4,
+        Math.max(1, Math.abs(target - from) / (duration / 1000)),
+      );
+      setReversing(reverseActive);
+      const waitingSince = performance.now();
+      let started = 0;
       const tick = (now: number) => {
-        if (disposed) return;
-        if (playing) {
-          if (
-            media.currentTime >= target - 0.025 ||
-            now - started > duration + 1500
-          ) {
-            settle();
+        if (disposed || token !== generation) return;
+        if (!started) {
+          if (now - waitingSince > 2500) {
+            settle(false);
             return;
           }
-          raf = requestAnimationFrame(tick);
-          return;
+          if (active.seeking || active.readyState < 2) {
+            raf = requestAnimationFrame(tick);
+            return;
+          }
+          started = now;
+          setStill(false);
+          void active.play().catch(() => {
+            if (token === generation) settle(false);
+          });
         }
-        const progress = Math.min(1, (now - started) / duration);
-        if (progress >= 1) {
+        const actualDuration =
+          (Math.abs(target - from) / active.playbackRate) * 1000;
+        if (
+          active.currentTime >= nativeTarget - 0.025 ||
+          now - started > actualDuration + 1200
+        ) {
           settle();
           return;
-        }
-        // Bounded seeking works in both directions. Short GOP encoding keeps
-        // decoding responsive without relying on negative playback rates.
-        if (!media.seeking && now - lastSeek > 32) {
-          const eased = progress * progress * (3 - 2 * progress);
-          media.currentTime = from + (target - from) * eased;
-          lastSeek = now;
         }
         raf = requestAnimationFrame(tick);
       };
@@ -153,7 +214,7 @@ export function FilmHero() {
         (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? innerHeight : 1);
       const input = gesture.push(delta, performance.now());
       if (input.fresh) wheelCaptured = false;
-      if (!atTop() || modalOpen()) {
+      if (!inStage() || modalOpen()) {
         wheelCaptured = false;
         return;
       }
@@ -162,11 +223,15 @@ export function FilmHero() {
       if (!busy && !canStep(input.direction) && !wheelCaptured) return;
       event.preventDefault();
       wheelCaptured = true;
-      if (input.trigger && !busy) go(index + input.direction);
+      if (input.trigger) {
+        if (busy && index === lastFilmChapter && input.direction > 0)
+          exitRequested = true;
+        else go(index + input.direction);
+      }
     };
     const key = (event: KeyboardEvent) => {
       if (
-        !atTop() ||
+        !inStage() ||
         modalOpen() ||
         event.ctrlKey ||
         event.metaKey ||
@@ -194,14 +259,17 @@ export function FilmHero() {
       event.preventDefault();
       if (!event.repeat) {
         capturedKey = event.key;
-        if (!busy) go(index + direction);
+        if (busy && index === lastFilmChapter && direction > 0)
+          exitRequested = true;
+        else go(index + direction);
       }
     };
     const keyUp = (event: KeyboardEvent) => {
       if (event.key === capturedKey) capturedKey = "";
     };
     const touchStart = (event: TouchEvent) => {
-      touchStartedHere = atTop() && !modalOpen() && event.touches.length === 1;
+      touchStartedHere =
+        inStage() && !modalOpen() && event.touches.length === 1;
       touchConsumed = false;
       touchY = event.touches[0]?.clientY ?? 0;
     };
@@ -216,7 +284,9 @@ export function FilmHero() {
       // scrolling. Only advance after a deliberate swipe crosses the threshold.
       if (!touchConsumed && Math.abs(delta) >= 28) {
         touchConsumed = true;
-        if (!busy) go(index + direction);
+        if (busy && index === lastFilmChapter && direction > 0)
+          exitRequested = true;
+        else go(index + direction);
       }
     };
     const syncMedia = () => {
@@ -239,10 +309,18 @@ export function FilmHero() {
       settle(false);
     };
     const leave = () => {
-      if (busy && !atTop()) settle(false);
+      if (busy && !inStage()) {
+        pending = null;
+        exitRequested = false;
+        settle(false);
+      }
     };
     const visibility = () => {
-      if (document.hidden && busy) settle(false);
+      if (document.hidden && busy) {
+        pending = null;
+        exitRequested = false;
+        settle(false);
+      }
     };
 
     setPreference();
@@ -294,21 +372,35 @@ export function FilmHero() {
         </a>
       </noscript>
       <div className="film-pin">
-        <div className="film-frame" aria-hidden="true">
+        <div
+          className="film-frame"
+          data-reversing={reversing}
+          aria-hidden="true"
+        >
           <video
             ref={video}
             muted
             playsInline
-            width="1600"
-            height="900"
+            width="1280"
+            height="720"
             preload={videoEnabled ? "auto" : "none"}
-            src={videoEnabled ? "/media/hero-scroll.mp4" : undefined}
+            src={videoEnabled ? "/media/hero-forward-v2.mp4" : undefined}
             poster="/media/hero-poster.jpg"
+          />
+          <video
+            ref={reverseVideo}
+            className="film-reverse"
+            muted
+            playsInline
+            width="960"
+            height="540"
+            preload={videoEnabled ? "auto" : "none"}
+            src={videoEnabled ? "/media/hero-reverse-v2.mp4" : undefined}
           />
           <img
             className="film-still"
             data-visible={still}
-            src={current.image}
+            src={stillImage}
             alt=""
             width="1600"
             height="900"
@@ -391,7 +483,6 @@ export function FilmHero() {
                 aria-label={`Kapitel ${i + 1}: ${item.name}`}
                 aria-current={chapter === i + 1 ? "step" : undefined}
                 data-complete={chapter > i + 1}
-                disabled={moving}
                 onClick={() => navigate.current(i + 1)}
               >
                 <span className="chapter-mark" />
@@ -404,7 +495,7 @@ export function FilmHero() {
               type="button"
               className="film-back"
               aria-label="Vorheriges Kapitel"
-              disabled={moving || chapter === 0}
+              disabled={chapter === 0}
               onClick={() => navigate.current(chapter - 1)}
             >
               ↑
@@ -413,7 +504,6 @@ export function FilmHero() {
               <button
                 type="button"
                 className="film-next"
-                disabled={moving}
                 onClick={() => navigate.current(chapter + 1)}
               >
                 {chapter === 0

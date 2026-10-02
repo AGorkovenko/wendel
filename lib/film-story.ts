@@ -76,6 +76,19 @@ export function transitionDuration(from: number, to: number) {
   return Math.min(2100, Math.max(1100, Math.abs(to - from) * 260));
 }
 
+// Keep one deliberate request, not an unbounded queue of trackpad events.
+export function chapterRequest(
+  current: number,
+  requested: number,
+  travel: number,
+  busy: boolean,
+) {
+  if (requested < 0 || requested > lastFilmChapter || requested === current)
+    return "ignore";
+  if (!busy) return "start";
+  return Math.sign(requested - current) !== travel ? "interrupt" : "queue";
+}
+
 // A trackpad gesture can emit events for longer than the video transition.
 // Do not unlock on animation completion: wait for a quiet gap or a reversal.
 export class ChapterWheelGesture {
@@ -83,6 +96,8 @@ export class ChapterWheelGesture {
   private direction = 0;
   private distance = 0;
   private consumed = false;
+  private lastMagnitude = 0;
+  private triggeredAt = -Infinity;
 
   push(delta: number, time: number) {
     const direction = Math.sign(delta);
@@ -93,16 +108,31 @@ export class ChapterWheelGesture {
         consumed: this.consumed,
         fresh: false,
       };
-    const fresh = time - this.lastTime > 200 || direction !== this.direction;
+    const magnitude = Math.abs(delta);
+    // A new trackpad stroke can start before the previous stroke's momentum
+    // has gone quiet. A strong renewed impulse is intentional, a tiny tail isn't.
+    const renewedImpulse =
+      this.consumed &&
+      time - this.triggeredAt > 350 &&
+      magnitude >= 28 &&
+      magnitude > this.lastMagnitude * 3;
+    const fresh =
+      time - this.lastTime > 200 ||
+      direction !== this.direction ||
+      renewedImpulse;
     if (fresh) {
       this.consumed = false;
       this.distance = 0;
     }
     this.lastTime = time;
     this.direction = direction;
-    this.distance += Math.abs(delta);
+    this.lastMagnitude = magnitude;
+    this.distance += magnitude;
     const trigger = !this.consumed && this.distance >= 28;
-    if (trigger) this.consumed = true;
+    if (trigger) {
+      this.consumed = true;
+      this.triggeredAt = time;
+    }
     return { direction, trigger, consumed: this.consumed, fresh };
   }
 }
