@@ -217,10 +217,10 @@ export default function Home() {
               </div>
               <div className="field-photo">
                 <img
-                  src="/images/wendel/self-pick.webp"
+                  src="/images/wendel/restored/self-pick-v1.webp"
                   alt="Ein Kind mit frisch gepflückten Erdbeeren auf einem Wendel-Feld"
-                  width="536"
-                  height="800"
+                  width="1026"
+                  height="1532"
                   loading="lazy"
                 />
                 <span>Naschen erlaubt.</span>
@@ -230,18 +230,18 @@ export default function Home() {
               <article className="cafe-story">
                 <div className="cafe-image">
                   <img
-                    src="/images/wendel/cafe.webp"
+                    src="/images/wendel/restored/cafe-v1.webp"
                     alt="Sonniger Außenbereich des Wendel Hof-Cafés mit roten Sonnenschirmen"
-                    width="1440"
-                    height="1080"
+                    width="1448"
+                    height="1086"
                     loading="lazy"
                   />
                   <img
                     className="cafe-cake"
-                    src="/images/wendel/cake.webp"
+                    src="/images/wendel/restored/cake-v1.webp"
                     alt="Hausgebackener Erdbeer-, Streusel- und Beerenkuchen im Wendel Hofladen"
-                    width="810"
-                    height="1080"
+                    width="1086"
+                    height="1448"
                     loading="lazy"
                   />
                 </div>
@@ -274,18 +274,18 @@ export default function Home() {
               <article className="shop-story">
                 <div className="shop-image">
                   <img
-                    src="/images/wendel/farm-shop.webp"
-                    alt="Frische Wendel-Produkte im Hofladen"
-                    width="1524"
-                    height="1080"
+                    src="/images/wendel/restored/farm-shop-v1.webp"
+                    alt="Eingang zum Wendel Hofladen mit Hof-Café im Außenbereich"
+                    width="1448"
+                    height="1086"
                     loading="lazy"
                   />
                   <img
                     className="shop-preserves"
-                    src="/images/wendel/preserves.webp"
+                    src="/images/wendel/restored/preserves-v1.webp"
                     alt="Wendel-Fruchtaufstriche aus eigener Ernte"
-                    width="600"
-                    height="800"
+                    width="1300"
+                    height="1209"
                     loading="lazy"
                   />
                 </div>
@@ -314,10 +314,10 @@ export default function Home() {
           <div className="family-photos">
             <img
               className="family-photo"
-              src="/images/wendel/family.webp"
+              src="/images/wendel/restored/family-v1.webp"
               alt="Die Familie Wendel auf ihrem Hof an der Bergstraße"
-              width="1080"
-              height="810"
+              width="1448"
+              height="1086"
               loading="lazy"
             />
             <span className="family-photo-label">
@@ -431,10 +431,10 @@ export default function Home() {
                 rel="noreferrer"
               >
                 <img
-                  src="/images/wendel/farm.webp"
+                  src="/images/wendel/restored/farm-v1.webp"
                   alt="Blühende Landschaft an der Bergstraße bei Wendel"
-                  width="1920"
-                  height="1920"
+                  width="1254"
+                  height="1254"
                   loading="lazy"
                 />
                 <span>

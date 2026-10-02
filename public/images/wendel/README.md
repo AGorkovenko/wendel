@@ -20,3 +20,7 @@ Base URL: https://spargelhof-wendel.de/wp-content/uploads/
 | pollination  | 2023/12/Einsatz-von-Hummeln.jpg                                |
 
 Rights remain with the original rights holders. These images must not be repurposed for unrelated brands.
+
+## Restored website versions
+
+Seven homepage photographs have non-destructive AI-assisted enhanced versions in [restored](restored/README.md). The original JPGs and the previous WebPs above are retained unchanged. See that manifest for PNG masters, exact edit prompts, original checksums and reconstruction limitations. Fine faces and label text require owner approval before public deployment.
